@@ -126,6 +126,3 @@ function G = make_ring(n)
     G = zeros(n);
     G = e1 * ones(n, 1)' + ones(n, 1) * e1' -  2 * e1 * e1';
 end
-n = 10;
-G = make_ring(n)
-G = make_complete(n)
