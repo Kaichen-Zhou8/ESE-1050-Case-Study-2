@@ -1,4 +1,6 @@
-function D = make_deployment(seed)
+
+function D = function_make_deployment(seed)
+    
 %MAKE_DEPLOYMENT  Generate a random robot-swarm deployment (ESE 105, Case Study II).
 %
 %   D = make_deployment(seed) returns one deployment as a struct with fields
@@ -85,6 +87,7 @@ hi = max(P0, [], 1);
 g = lo + rand(1, 2).*(hi - lo);
 
 D = struct('G', G, 'P0', P0, 'r', r, 'faulty', faulty, 'g', g, 'seed', seed);
+
 end
 
 % ---------------------------------------------------------------------
@@ -112,3 +115,17 @@ for k = 1:n
 end
 tf = all(R(:));
 end
+
+function G = make_complete(n)
+    G = ones(n) - eye(n);
+end
+
+function G = make_ring(n)
+    e1 = eye(n);
+    e1 = e1(:, 1);
+    G = zeros(n);
+    G = e1 * ones(n, 1)' + ones(n, 1) * e1' -  2 * e1 * e1';
+end
+n = 10;
+G = make_ring(n)
+G = make_complete(n)
