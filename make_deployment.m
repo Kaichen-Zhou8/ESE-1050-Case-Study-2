@@ -120,9 +120,18 @@ function G = make_complete(n)
     G = ones(n) - eye(n);
 end
 
-function G = make_ring(n)
+function G = make_star(n)
     e1 = eye(n);
     e1 = e1(:, 1);
     G = zeros(n);
     G = e1 * ones(n, 1)' + ones(n, 1) * e1' -  2 * e1 * e1';
+end
+
+function G = make_ring(n, k)
+    G = zeros(n);
+    S = eye(n);
+    S = S(:, [2:end, 1]);
+    for i = 1:k
+        G = G + S^i + (S^i)';
+    end
 end
