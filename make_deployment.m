@@ -124,7 +124,7 @@ function G = make_star(n)
     e1 = eye(n);
     e1 = e1(:, 1);
     G = zeros(n);
-    G = e1 * ones(n, 1)' + ones(n, 1) * e1' -  2 * e1 * e1';
+    G = e1 * ones(1, n) + ones(n, 1) * e1' -  2 * e1 * e1';
 end
 
 function G = make_ring(n, k)
@@ -134,4 +134,11 @@ function G = make_ring(n, k)
     for i = 1:k
         G = G + S^i + (S^i)';
     end
+end
+
+function G = make_disk(P, r)
+    n = size(P, 1);
+    s = P(:, 1).^2 + P(:, 2).^2;
+    Delta = s * ones(1, n) + ones(n, 1) * s' - 2 * (P * P');
+    G = (Delta < r^2) - eye(n);
 end
