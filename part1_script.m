@@ -11,8 +11,10 @@ K = 3;
 X = simulate_linear(W, x0, K)
 disp(norm(X(:,end) - W^K * x0))
 
-n = 100;
-rng(105); P0 = [5*rand(50,2); 5*rand(50,2) + [6 0]];
+n  = 150;
+nL = floor(n/2);
+nR = n - nL;
+rng(105); P0 = [5*rand(nL,2); 5*rand(nR,2) + [6 0]];
 
 rmin = NaN;
 for j = 1:200
