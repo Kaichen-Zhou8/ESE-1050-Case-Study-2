@@ -18,4 +18,3 @@ function stats = graph_stats(G)
     else
         stats.diameter = k;
     end
-end
