@@ -1,0 +1,1 @@
+G = ones(n) - eye(n);
