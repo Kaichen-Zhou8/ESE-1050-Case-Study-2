@@ -28,6 +28,7 @@ Wchecks(WAs, WBs, Gs);
 % as instructed by the handout.
 rendezvous_condition = 0.01*Spread(P0(:,1),P0(:,2));
 rendevous_times = zeros(5,2);
+
 for i = 1:5
     % Looping through each of the topologies
     K=7000;
@@ -63,6 +64,11 @@ for i = 1:5
         end
     end
     
+    if i == 2
+        star_WA_final = [mean(X_A(:, 7000)), mean(Y_A(:, 7000))];
+        star_WB_final = [mean(X_B(:, 7000)), mean(Y_B(:, 7000))];
+    end
+
     figure;
     t = (0:length(spread_A)-1).';
     plot(t, log10(spread_A), 'b-', 'LineWidth', 2); hold on;
@@ -71,7 +77,11 @@ for i = 1:5
     title(sprintf('Network %d: Spread over time, Rendezvous Time A: %d, Rendezvous Time B: %d', i, rendevous_times(i,1), rendevous_times(i,2)));
     legend('Weight Matrix A', 'Weight Matrix B');
     %Plotting, nothing to see here :)
+
 end
+predicted = [mean(X0), mean(Y0)];
+E2difference = [norm(star_WA_final - predicted), norm(star_WB_final - predicted)];
+% WB reaches rendezvous faster
 
 function delta = Spread(x,y)
     % k is time step,
