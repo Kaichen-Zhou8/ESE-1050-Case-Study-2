@@ -30,56 +30,44 @@ rendezvous_condition = 0.01*Spread(P0(:,1),P0(:,2));
 rendevous_times = zeros(5,2);
 for i = 1:5
     % Looping through each of the topologies
-    K=100;
-    %Set the initial number of time steps to simulate to 100.
+    K=7000;
+    %Set the initial number of time steps to simulate to 7000.
     break_flag = false;
     % break_flag is used later to exit the while loop
-    while (K < 5000)
-        % iterate up to 5000 time steps, if rendezvous condition is not met, 
-        % increase K by 100 and repeat the simulation.
-        % 5000 doesn't actually let the smaller disk network (G4) converge, but I had to avoid excessive computation time.
-        % increase above if you want to see G4 converge
-        WA = WAs{i};
-        WB = WBs{i};
-        X0 = P0(:,1);
-        Y0 = P0(:,2);
-        X_A = simulate_linear(WA, X0, K);
-        Y_A = simulate_linear(WA, Y0, K);
-        X_B = simulate_linear(WB, X0, K);
-        Y_B = simulate_linear(WB, Y0, K);
-        spread_A = zeros(K+1,1);
-        %Creating empty arrays to store the spread values for each time step
-        spread_B = zeros(K+1,1);
-        for k = 1:K+1
-            spread_A(k) = Spread(X_A(:,k),Y_A(:,k));
-            %Calling the spread function (delta_k in the hand out) to compute the spread of robots
-            spread_B(k) = Spread(X_B(:,k),Y_B(:,k));
-            if spread_A(k) < rendezvous_condition && spread_B(k) < rendezvous_condition
-                break_flag = true;
-                %While loop will break if both networks meet the rendezvous condition at the same time step k.
-            end
-            if spread_A(k) < rendezvous_condition && rendevous_times(i,1) == 0
-                rendevous_times(i,1) = k;
-                %update the rendezvous time for network A if it meets the condition and has not been recorded yet.
-            end
-            if spread_B(k) < rendezvous_condition && rendevous_times(i,2) == 0
-                rendevous_times(i,2) = k;
-                %update the rendezvous time for network B if it meets the condition and has not been recorded yet.
-            end
+
+    WA = WAs{i};
+    WB = WBs{i};
+    X0 = P0(:,1);
+    Y0 = P0(:,2);
+    X_A = simulate_linear(WA, X0, K);
+    Y_A = simulate_linear(WA, Y0, K);
+    X_B = simulate_linear(WB, X0, K);
+    Y_B = simulate_linear(WB, Y0, K);
+
+
+    for k = 1:K+1
+        spread_A(k) = Spread(X_A(:,k),Y_A(:,k));
+        %Calling the spread function (delta_k in the hand out) to compute the spread of robots
+        spread_B(k) = Spread(X_B(:,k),Y_B(:,k));
+        if spread_A(k) < rendezvous_condition && spread_B(k) < rendezvous_condition
+            break_flag = true;
+            %While loop will break if both networks meet the rendezvous condition at the same time step k.
         end
-        if break_flag
-            break;
-            %exit the loop
-        else
-            K = K + 100;
-            %or increase K by 100 and repeat the simulation.
+        if spread_A(k) < rendezvous_condition && rendevous_times(i,1) == 0
+            rendevous_times(i,1) = k;
+            %update the rendezvous time for network A if it meets the condition and has not been recorded yet.
+        end
+        if spread_B(k) < rendezvous_condition && rendevous_times(i,2) == 0
+            rendevous_times(i,2) = k;
+            %update the rendezvous time for network B if it meets the condition and has not been recorded yet.
         end
     end
+    
     figure;
     t = (0:length(spread_A)-1).';
-    plot(t, spread_A, 'b-', 'LineWidth', 2); hold on;
-    plot(t, spread_B, 'r--', 'LineWidth', 2); hold off;
-    xlabel('Time step k'); ylabel('Spread');
+    plot(t, log10(spread_A), 'b-', 'LineWidth', 2); hold on;
+    plot(t, log10(spread_B), 'r--', 'LineWidth', 2); hold off;
+    xlabel('Time step k'); ylabel('log(\delta)');
     title(sprintf('Network %d: Spread over time, Rendezvous Time A: %d, Rendezvous Time B: %d', i, rendevous_times(i,1), rendevous_times(i,2)));
     legend('Weight Matrix A', 'Weight Matrix B');
     %Plotting, nothing to see here :)
@@ -130,11 +118,4 @@ function W = make_WB(G)
     L = D - G;                  % Laplacian
     epsilon = 1 / max(d);
     W = eye(n) - epsilon * L;
-end
-
-function G = make_disk(P, r)
-    n = size(P, 1);
-    s = P(:, 1).^2 + P(:, 2).^2;
-    Delta = s * ones(1, n) + ones(n, 1) * s' - 2 * (P * P');
-    G = (Delta < r^2) - eye(n);
 end

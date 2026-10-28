@@ -60,29 +60,3 @@ title(sprintf('T4 disk network, r = %.1f', rmin));
 
 G1 = Gs{1}; G2 = Gs{2}; G3 = Gs{3};
 save('part1_results.mat', 'P0', 'rmin', 'kbest', 'G1', 'G2', 'G3', 'G4');
-
-function G = make_complete(n)
-    G = ones(n) - eye(n);
-end
-
-function G = make_star(n)
-    e1 = eye(n);
-    e1 = e1(:, 1);
-    G = e1 * ones(1, n) + ones(n, 1) * e1' - 2 * e1 * e1';
-end
-
-function G = make_ring(n, k)
-    G = zeros(n);
-    S = eye(n);
-    S = S(:, [2:end, 1]);
-    for i = 1:k
-        G = G + S^i + (S^i)';
-    end
-end
-
-function G = make_disk(P, r)
-    n = size(P, 1);
-    s = P(:, 1).^2 + P(:, 2).^2;
-    Delta = s * ones(1, n) + ones(n, 1) * s' - 2 * (P * P');
-    G = (Delta < r^2) - eye(n);
-end
