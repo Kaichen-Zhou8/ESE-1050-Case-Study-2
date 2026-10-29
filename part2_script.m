@@ -129,3 +129,5 @@ function W = make_WB(G)
     epsilon = 1 / max(d);
     W = eye(n) - epsilon * L;
 end
+
+save('part2_results.mat', 'WAs', K);
