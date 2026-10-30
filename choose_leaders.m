@@ -27,13 +27,43 @@ function S = choose_leaders(G, P0, faulty, g, m)
 %   Members: <names>
 %
 %   Strategy (2-3 sentences describing your rule, in words):
-%   <describe it here>
+%   Each robot is weighted by its squared distance from g, with faulty
+%   robots weighted 0. Using the influence matrix built from powers of
+%   W_A = (I+D)^-1 (I+G), we greedily pick the robot with the most
+%   weighted influence over robots not yet covered, then discount the
+%   robots it influences so later leaders spread to other parts of the
+%   network (other zones).
 
 n = size(G, 1);
-working = true(n, 1);
-working(faulty) = false;
+d = G * ones(n, 1);
+W = (eye(n) + diag(d)) \ (eye(n) + G);
 
-% ---- replace this placeholder with your strategy ----
-S = [];   % no leaders: valid, but scores 0
+hops  = 3;
+alpha = 0.5;
+M  = zeros(n);
+Wk = eye(n);
+for h = 1:hops
+    Wk = Wk * W;
+    M  = M + Wk;
+end
+M = M / hops;
+
+w = sum((P0 - repmat(g, n, 1)).^2, 2);   % squared distance to g
+w(faulty) = 0;
+
+u = ones(n, 1);
+blocked = false(n, 1);
+blocked(faulty) = true;
+
+m = min(m, sum(~blocked));
+S = zeros(m, 1);
+for t = 1:m
+    b = M' * (w .* u);
+    b(blocked) = -Inf;
+    [~, l] = max(b);
+    S(t) = l;
+    blocked(l) = true;
+    u = u .* (1 - min(1, alpha * M(:, l) / max(M(:, l))));
+end
 
 end
