@@ -1,5 +1,6 @@
 close all;
-load part1_results.mat;
+run(fullfile(fileparts(fileparts(mfilename('fullpath'))), 'setup_project.m'));
+load(fullfile(projectRoot, 'Part1', 'part1_results.mat'));
 % additional G5 is created with a slightly larger radius than G4
 % to compare the performance of the networks in terms of rendezvous time as required. 
 G5 = make_disk(P0, rmin+0.4);
@@ -73,7 +74,7 @@ for i = 1:5
     t = (0:length(spread_A)-1).';
     plot(t, log10(spread_A), 'b-', 'LineWidth', 2); hold on;
     plot(t, log10(spread_B), 'r--', 'LineWidth', 2); hold off;
-    xlabel('Time step k'); ylabel('log(\delta)');
+    xlabel('Time step k'); ylabel('log(delta)');
     title(sprintf('Network %d: Spread over time, Rendezvous Time A: %d, Rendezvous Time B: %d', i, rendevous_times(i,1), rendevous_times(i,2)));
     legend('Weight Matrix A', 'Weight Matrix B');
     %Plotting, nothing to see here :)
@@ -113,21 +114,7 @@ function Wchecks(WAs, WBs, Gs)
     end
 
 end
-function W = make_WA(G)
-    n = size(G,1);
-    d = G * ones(n,1);
-    D = diag(d);
-    I = eye(n);
-    W = (I + D) \ (I + G); 
-end
 
-function W = make_WB(G)
-    n = size(G,1);
-    d = G * ones(n,1);
-    D = diag(d);
-    L = D - G;                  % Laplacian
-    epsilon = 1 / max(d);
-    W = eye(n) - epsilon * L;
-end
 
-save('part2_results.mat', 'WAs', K);
+
+save(fullfile(projectRoot, 'Part2', 'part2_results.mat'), 'K');

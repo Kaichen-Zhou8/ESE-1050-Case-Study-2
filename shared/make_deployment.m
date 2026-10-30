@@ -1,5 +1,5 @@
 
-function D = function_make_deployment(seed)
+function D = make_deployment(seed)
     
 %MAKE_DEPLOYMENT  Generate a random robot-swarm deployment (ESE 105, Case Study II).
 %

@@ -1,4 +1,5 @@
 clear; clc; close all;
+run(fullfile(fileparts(fileparts(mfilename('fullpath'))), 'setup_project.m'));
 
 m = 4;
 seeds = 1:30;

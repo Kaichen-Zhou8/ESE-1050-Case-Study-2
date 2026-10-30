@@ -1,4 +1,5 @@
 clear; clc; close all;
+run(fullfile(fileparts(fileparts(mfilename('fullpath'))), 'setup_project.m'));
 
 s = graph_stats(make_star(5))
 s = graph_stats(make_ring(5,1))
@@ -59,4 +60,5 @@ axis equal; grid on; xlabel('x'); ylabel('y');
 title(sprintf('T4 disk network, r = %.1f', rmin));
 
 G1 = Gs{1}; G2 = Gs{2}; G3 = Gs{3};
-save('part1_results.mat', 'P0', 'rmin', 'kbest', 'G1', 'G2', 'G3', 'G4');
+save(fullfile(projectRoot, 'Part1', 'part1_results.mat'), ...
+     'P0', 'rmin', 'kbest', 'G1', 'G2', 'G3', 'G4');
