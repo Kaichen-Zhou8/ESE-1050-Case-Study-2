@@ -75,7 +75,12 @@ for i = 1:5
     plot(t, log10(spread_A), 'b-', 'LineWidth', 2); hold on;
     plot(t, log10(spread_B), 'r--', 'LineWidth', 2); hold off;
     xlabel('Time step k'); ylabel('log(delta)');
-    title(sprintf('Network %d: Spread over time, Rendezvous Time A: %d, Rendezvous Time B: %d', i, rendevous_times(i,1), rendevous_times(i,2)));
+    xlim([0, max(rendevous_times(i, :))+10])
+    if i == 5
+        title(sprintf('Network T4 (rmin + 0.4): Spread over time, Rendezvous Time A: %d, Rendezvous Time B: %d', rendevous_times(i,1), rendevous_times(i,2)));
+    else
+        title(sprintf('Network T%d: Spread over time, Rendezvous Time A: %d, Rendezvous Time B: %d', i, rendevous_times(i,1), rendevous_times(i,2)));
+    end
     legend('Weight Matrix A', 'Weight Matrix B');
     %Plotting, nothing to see here :)
 
