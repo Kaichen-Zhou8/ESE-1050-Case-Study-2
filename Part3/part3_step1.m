@@ -54,21 +54,7 @@ for j = 1:3
     title(sprintf('%s: worst case (seed %d, J = %.1f)', names{j}, seeds(idx), worst));
 end
 
-function S = pick_random(D, m)
-    w = setdiff((1:size(D.G,1))', D.faulty(:));
-    S = w(randperm(numel(w), m));
-end
 
-function S = pick_degree(D, m)
-    d = D.G * ones(size(D.G,1), 1);
-    d(D.faulty) = -Inf;
-    [~, i] = sort(d, 'descend');
-    S = i(1:m);
-end
 
-function S = pick_closest(D, m)
-    dist = sum((D.P0 - D.g).^2, 2);
-    dist(D.faulty) = Inf;
-    [~, i] = sort(dist, 'ascend');
-    S = i(1:m);
-end
+
+
