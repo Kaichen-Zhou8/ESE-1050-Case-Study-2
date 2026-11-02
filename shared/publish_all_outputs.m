@@ -9,6 +9,9 @@ close all;
 run_in_own_workspace(fullfile(projectRoot,'Part3','part3_D1_script.m'));
 close all;
 run_in_own_workspace(fullfile(projectRoot,'Part3','function_testing.m'));
+close all;
+run_in_own_workspace(fullfile(projectRoot,'Part3','evaluate_mission.m'));
+close all;
 
 function run_in_own_workspace(f)
     run(f);

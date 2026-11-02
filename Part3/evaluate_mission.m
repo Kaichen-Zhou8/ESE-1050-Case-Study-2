@@ -36,6 +36,16 @@ for q = 1:2
     median_seeds(q) = seeds(medIdx);
     worst(q) = seeds(worstIdx);
 end
+all_seeds = [seed_sets{1}, seed_sets{2}];
+all_results = [results{1}; results{2}];
+fprintf('\nAverage and worst J across all %d deployments:\n', size(all_results, 1));
+for k = 1:n_s
+    strategy_J = all_results(:, k);
+    [worstJ, worstIdx] = min(strategy_J);
+    fprintf('  %-14s Average J = %.3f, Worst J = %.3f (seed %d)\n', ...
+        names{k}, mean(strategy_J), worstJ, all_seeds(worstIdx));
+end
+
 seeds_export=[best, median_seeds, worst];
 seeds = 2001:2050;
 t = zeros(size(seeds));
