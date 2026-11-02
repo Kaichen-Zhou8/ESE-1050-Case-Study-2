@@ -1,4 +1,5 @@
 clear; clc; close all;
+run(fullfile(fileparts(fileparts(mfilename('fullpath'))), 'setup_project.m'));
 m = 4;
 strats = {@choose_leaders, @base_random, @base_degree, @base_closest};
 names  = {'Choose Leaders', 'Random', 'Degree', 'Closest'};
